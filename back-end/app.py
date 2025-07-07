@@ -139,14 +139,22 @@ def cleaning():
 
 def load_models():
     """Loads precomputed models from disk"""
-    global global_similarity_matrix, title_to_index
-    
+    global global_similarity_matrix, title_to_index, movie_data
     if os.path.exists('similarity.pkl'):
-        global_similarity_matrix = pickle.load(open('similarity.pkl', 'rb'))
-    
+        with open('similarity.pkl', 'rb') as f:
+            global_similarity_matrix = pickle.load(f)  # Read in binary mode
     if os.path.exists('movies_list.pkl'):
-        movies_df = pickle.load(open('movies_list.pkl', 'rb'))
+        with open('movies_list.pkl', 'rb') as f:
+            movies_df = pickle.load(f)
         title_to_index = pd.Series(movies_df.index, index=movies_df['title']).to_dict()
+    # global global_similarity_matrix, title_to_index
+    
+    # if os.path.exists('similarity.pkl'):
+    #     global_similarity_matrix = pickle.load(open('similarity.pkl', 'rb'))
+    
+    # if os.path.exists('movies_list.pkl'):
+    #     movies_df = pickle.load(open('movies_list.pkl', 'rb'))
+    #     title_to_index = pd.Series(movies_df.index, index=movies_df['title']).to_dict()
 
 @app.route('/recommend')
 def recommend():
@@ -388,3 +396,5 @@ if __name__ == '__main__':
     
     # Start the app
     app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Use Render's $PORT env var
+    app.run(host="0.0.0.0", port=port)
