@@ -136,30 +136,30 @@ def cleaning():
     
     print(f"Saved {len(movie_data)} movies!")
 
-
 def load_models():
     """Loads precomputed models from disk"""
-    global global_similarity_matrix, title_to_index, movie_data
-    if os.path.exists('similarity.pkl'):
-        with open('similarity.pkl', 'rb') as f:
-            global_similarity_matrix = pickle.load(f)  # Read in binary mode
-    if os.path.exists('movies_list.pkl'):
-        with open('movies_list.pkl', 'rb') as f:
-            movies_df = pickle.load(f)
-        title_to_index = pd.Series(movies_df.index, index=movies_df['title']).to_dict()
+    # global global_similarity_matrix, title_to_index, movie_data
+    # if os.path.exists('similarity.pkl'):
+    #     with open('similarity.pkl', 'rb') as f:
+    #         global_similarity_matrix = pickle.load(f)  # Read in binary mode
+    # if os.path.exists('movies_list.pkl'):
+    #     with open('movies_list.pkl', 'rb') as f:
+    #         movies_df = pickle.load(f)
+    #     title_to_index = pd.Series(movies_df.index, index=movies_df['title']).to_dict()
     # global global_similarity_matrix, title_to_index
     
-    # if os.path.exists('similarity.pkl'):
-    #     global_similarity_matrix = pickle.load(open('similarity.pkl', 'rb'))
+    if os.path.exists('similarity.pkl'):
+        global_similarity_matrix = pickle.load(open('similarity.pkl', 'rb'))
     
-    # if os.path.exists('movies_list.pkl'):
-    #     movies_df = pickle.load(open('movies_list.pkl', 'rb'))
-    #     title_to_index = pd.Series(movies_df.index, index=movies_df['title']).to_dict()
+    if os.path.exists('movies_list.pkl'):
+        movies_df = pickle.load(open('movies_list.pkl', 'rb'))
+        title_to_index = pd.Series(movies_df.index, index=movies_df['title']).to_dict()
 
 @app.route('/recommend')
 def recommend():
     """Returns similar movies based on title"""
     global global_similarity_matrix, title_to_index, movie_data
+    
     
     if global_similarity_matrix is None:
         return jsonify({"error": "Recommendation system not initialized."}), 500
@@ -229,10 +229,6 @@ def search():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-
-
-
 @app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
@@ -256,6 +252,18 @@ def register():
     users_col.insert_one(user_doc)
     return jsonify({"message": "User registered"}), 201
 
+# @app.route("/login", methods=["POST"])
+# def login():
+#     data = request.get_json()
+#     email = data.get("email")
+#     password = data.get("password")
+
+#     user = users_col.find_one({"email": email})
+#     if not user or not bcrypt.checkpw(password.encode('utf-8'), user['password']):
+#         return jsonify({"error": "Invalid credentials"}), 401
+
+#     token = jwt.encode({"user_id": str(user["_id"])}, SECRET_KEY, algorithm="HS256")
+#     return jsonify({"message": "Login successful!", "token": token}), 200
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -264,12 +272,20 @@ def login():
     password = data.get("password")
 
     user = users_col.find_one({"email": email})
-    if not user or not bcrypt.checkpw(password.encode('utf-8'), user['password']):
+    if not user:
+        return jsonify({"error": "Invalid credentials"}), 401
+
+    stored_hash = user["password"]
+    
+    # If it's stored as a string, convert it to bytes
+    if isinstance(stored_hash, str):
+        stored_hash = stored_hash.encode("utf-8")
+
+    if not bcrypt.checkpw(password.encode("utf-8"), stored_hash):
         return jsonify({"error": "Invalid credentials"}), 401
 
     token = jwt.encode({"user_id": str(user["_id"])}, SECRET_KEY, algorithm="HS256")
     return jsonify({"message": "Login successful!", "token": token}), 200
-
 
 
 def token_required(f):
@@ -357,7 +373,6 @@ def recommend_personal(current_user):
 
     return jsonify(recommended), 200
 
-
 @app.route("/auth/profile", methods=["GET"])
 @token_required
 def get_profile(current_user):
@@ -371,13 +386,6 @@ def get_profile(current_user):
     return jsonify(user_data), 200
 
 
-# @app.route('/scrape', methods=['POST'])
-# def trigger_scraping():
-#     scraping()
-#     return jsonify({"message": "Scraping completed!"}), 200
-
-
-# Initialize the app
 if __name__ == '__main__':
     print("The Back-End is Starting... ")
     
@@ -395,6 +403,18 @@ if __name__ == '__main__':
         load_models()
     
     # Start the app
-    app.run(debug=True)
-    port = int(os.environ.get("PORT", 5000))  # Use Render's $PORT env var
-    app.run(host="0.0.0.0", port=port)
+     app.run(debug=True, use_reloader=False)
+    # app.run(debug=True)
+    # port = int(os.environ.get("PORT", 5000))  # Use Render's $PORT env var
+    # app.run(host="0.0.0.0", port=port)
+
+
+
+    
+# @app.route('/scrape', methods=['POST'])
+# def trigger_scraping():
+#     scraping()
+#     return jsonify({"message": "Scraping completed!"}), 200
+
+
+# Initialize the app
