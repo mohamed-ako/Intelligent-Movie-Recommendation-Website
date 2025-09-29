@@ -14,11 +14,12 @@ This Bachelor's final year project delivers a fully functional **Intelligent Hyb
 
 -----
 
-## Project Demonstration
+### 🎥 Video Overview
 
-Check out the full video overview of the project's interface and functionality by clicking the image below:
+[![Video Thumbnail - Click to Watch!]([path/to/your/thumbnail.png](https://youtu.be/EZ7PLJ-qDoo?si=JN86wKEZc9mkpUgZ))]([https://www.youtube.com/watch?v=YourVideoID](https://youtu.be/EZ7PLJ-qDoo?si=JN86wKEZc9mkpUgZ))
 
 -----
+
 
 ## Technical Stack 
 
