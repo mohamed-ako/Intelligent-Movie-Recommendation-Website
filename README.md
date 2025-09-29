@@ -1,4 +1,4 @@
-# Intelligent Hybrid Movie Recommendation Website 🍿
+# Intelligent Hybrid Movie Recommendation Website 
 
 ## Project Overview
 
@@ -28,7 +28,7 @@ This project is the final year work for my Bachelor's degree, which delivers an 
 
 -----
 
-## Core Recommendation Logic 🧠
+## Core Recommendation Logic 
 
 The system combines two primary components:
 
@@ -50,7 +50,7 @@ The system combines two primary components:
 
 -----
 
-## API Endpoints (Backend) 🔗
+## API Endpoints (Backend) 
 
 The Flask backend exposes several key endpoints for the frontend application:
 
@@ -65,7 +65,7 @@ The Flask backend exposes several key endpoints for the frontend application:
 
 -----
 
-## Setup and Installation 🚀
+## Setup and Installation 
 
 [cite\_start]You can set up and run this system using the contents of `requirements.txt` (for Python backend) and `package.json` (for React frontend)[cite: 473].
 
@@ -85,7 +85,7 @@ The Flask backend exposes several key endpoints for the frontend application:
 
 -----
 
-## Future Work 💡
+## Future Work 
 
 Based on the project's limitations, future improvements could include:
 
