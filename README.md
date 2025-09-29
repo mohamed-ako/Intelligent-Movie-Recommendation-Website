@@ -12,9 +12,7 @@ This Bachelor's final year project delivers a fully functional **Intelligent Hyb
   * **High Performance:** Achieved a superior **Precision@10 of 85%** on practical user testing, significantly outperforming Pure Content-Based (70%) and Popularity-Based (58%) systems.
   * **Functional Prototype:** A complete, working website with a clean interface and end-to-end functionality, including user account management.
 
------
-
-### 🎥 Video Overview
+### Video Overview
 
 [![Video Thumbnail - Click to Watch!]([path/to/your/thumbnail.png](https://youtu.be/EZ7PLJ-qDoo?si=JN86wKEZc9mkpUgZ))]([https://www.youtube.com/watch?v=YourVideoID](https://youtu.be/EZ7PLJ-qDoo?si=JN86wKEZc9mkpUgZ))
 
