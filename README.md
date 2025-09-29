@@ -2,72 +2,76 @@
 
 ## Project Overview
 
-This project is the final year work for my Bachelor's degree, which delivers an **Intelligent Hybrid Movie Recommendation System** in the form of a fully functional end-to-end website.
-
-[cite\_start]The core challenge addressed is the overwhelming number of online movies, which makes it hard for users to find quality content[cite: 273]. [cite\_start]Our solution uses a hybrid machine learning approach to provide **personal, accurate, and real-time recommendations** based on individual taste, not just popularity[cite: 274].
+This Bachelor's final year project delivers a fully functional **Intelligent Hybrid Movie Recommendation System**. It addresses the challenge of content overload, offering **personal, accurate, and real-time recommendations** based on individual taste rather than simple popularity.
 
 ### Key Features & Contributions
 
-  * [cite\_start]**Hybrid Model:** Combines **Content-Based** filtering (using movie features) and **User Action** tracking (clicks/favorites) for superior accuracy[cite: 331, 335, 507].
-  * [cite\_start]**Real-time Personalization:** Achieves extremely fast recommendation speeds, averaging **0.15 - 0.3 seconds** for personal results[cite: 295, 484, 509].
-  * [cite\_start]**Cold-Start Solution:** Handles new users and new movies effectively, a weakness of traditional Collaborative Filtering[cite: 341, 347].
-  * [cite\_start]**High Performance:** Achieved a **Precision@10 of 85%** on practical user testing, significantly outperforming Pure Content-Based (70%) and Popularity-Based (58%) systems[cite: 480, 483].
-  * [cite\_start]**Functional Prototype:** Developed a complete, working website with user accounts and a smooth interface[cite: 296, 344, 506].
+  * **Hybrid Model:** Combines **Content-Based** filtering (using movie features) and **User Action** tracking (clicks/favorites) for superior recommendation accuracy.
+  * **Real-time Personalization:** The system is highly responsive, achieving extremely fast recommendation speeds, averaging **0.15 - 0.3 seconds** for personalized results.
+  * **Cold-Start Solution:** Handles new users and new movies effectively, overcoming a major weakness of traditional Collaborative Filtering methods.
+  * **High Performance:** Achieved a superior **Precision@10 of 85%** on practical user testing, significantly outperforming Pure Content-Based (70%) and Popularity-Based (58%) systems.
+  * **Functional Prototype:** A complete, working website with a clean interface and end-to-end functionality, including user account management.
 
 -----
 
-## Technical Stack 🛠️
+## Project Demonstration
+
+Check out the full video overview of the project's interface and functionality by clicking the image below:
+
+-----
+
+## Technical Stack 
 
 | Component | Technology | Description |
 | :--- | :--- | :--- |
-| **Frontend** | **React.js** | [cite\_start]User interface, built with `react-router-dom` and **Redux Toolkit (RTK Query)**[cite: 497]. |
-| **Backend** | **Flask** (Python) | [cite\_start]RESTful API server for handling user requests and serving recommendations[cite: 461, 503]. |
-| **Database** | **MongoDB Atlas** | [cite\_start]Used to store user interaction data (clicks, favorites) and user accounts[cite: 315, 503]. |
-| **Data Source** | **TMDb API** | [cite\_start]Movie metadata (title, overview, genres, popularity) gathered using Python scraping[cite: 314, 349, 350]. |
-| **ML Libraries** | [cite\_start]**Scikit-learn** (for **CountVectorizer** and **Cosine Similarity**)[cite: 336, 446]. |
+| **Frontend** | **React.js** | User interface built with `react-router-dom` and **Redux Toolkit (RTK Query)**. |
+| **Backend** | **Flask** (Python) | RESTful API server responsible for processing ML requests and serving recommendations. |
+| **Database** | **MongoDB Atlas** | Stores user interaction data (clicks, favorites) and manages user account persistence. |
+| **Data Source** | **TMDb API** | Movie metadata (title, overview, genres, popularity) gathered using custom Python scraping. |
+| **ML Libraries** | **Scikit-learn** | Utilized for the implementation of **CountVectorizer** and **Cosine Similarity**. |
 
 -----
 
 ## Core Recommendation Logic 
 
-The system combines two primary components:
+The system operates via two integrated components: a pre-calculated content core and a real-time personalization engine.
 
 ### 1\. Content-Based Core (Pre-calculated)
 
-[cite\_start]This component uses text data to determine movie similarity[cite: 446].
+This core establishes a baseline for movie similarity using text features.
 
-1.  [cite\_start]**Preprocessing:** Movie `title`, `overview`, and `genres` are combined into a single text string and cleaned (e.g., lowercased, stop words removed)[cite: 433, 459].
-2.  [cite\_start]**Vectorization:** **CountVectorizer** converts this text into numerical vectors based on word frequencies, filtering out common English words[cite: 435, 439, 451].
-3.  [cite\_start]**Similarity Matrix:** **Cosine Similarity** is used to calculate the angle between every movie vector, resulting in a matrix that shows how related every movie is to every other movie[cite: 441, 443, 452]. [cite\_start]This matrix is calculated once and saved for fast lookups[cite: 460].
+1.  **Preprocessing:** Movie `title`, `overview`, and `genres` are combined into a single feature text string and then cleaned (e.g., lowercased, stop words removed).
+2.  **Vectorization:** **CountVectorizer** converts this text into numerical sparse vectors based on word frequencies, filtering out common English words.
+3.  **Similarity Matrix:** **Cosine Similarity** calculates the angular relationship between every movie vector, yielding a matrix that defines movie-to-movie relatedness. This computationally intensive matrix is calculated once and saved for fast lookups.
 
 ### 2\. Personalized Hybrid Aggregation (Real-time)
 
-[cite\_start]This logic runs in real-time when a logged-in user requests recommendations[cite: 453, 457].
+This logic executes instantaneously when a user requests recommendations.
 
-1.  [cite\_start]**Find User History:** Retrieve all movies the current user has **clicked** or **favorited** (from MongoDB)[cite: 315, 453].
-2.  [cite\_start]**Calculate Score:** Use the pre-calculated **Similarity Matrix** to find the average similarity score of **all unseen movies** to the user's history[cite: 454, 455].
-3.  [cite\_start]**Filter and Rank:** Sort the unseen movies by this average score and present the **Top 10 Personal Recommendations**[cite: 456, 457].
+1.  **Find User History:** Retrieves all movies the current user has **clicked** or **favorited** from the MongoDB database.
+2.  **Calculate Score:** Uses the pre-calculated **Similarity Matrix** to determine the average similarity score of **all unseen movies** to the user's previously liked items.
+3.  **Filter and Rank:** Sorts the movies by this aggregated score, filters out seen movies, and presents the **Top 10 Personal Recommendations**.
 
 -----
 
 ## API Endpoints (Backend) 
 
-The Flask backend exposes several key endpoints for the frontend application:
+The Flask API provides the necessary functionality for the frontend application:
 
 | Endpoint | Method | Function | Requires Auth |
 | :--- | :--- | :--- | :--- |
-| `/recommend` | `GET` | [cite\_start]Get general similar movies (non-personal)[cite: 466]. | No |
-| `/recommend/personal`| `GET` | [cite\_start]Get Top 10 personal recommendations[cite: 466]. | Yes |
-| `/search` | `GET` | [cite\_start]Find movies by name[cite: 467]. | No |
-| `/user/clicked` | `PUT` | [cite\_start]Save a movie the user clicked[cite: 468]. | Yes |
-| `/user/favorites` | `PUT/DELETE` | [cite\_start]Add or remove a movie from user's favorites[cite: 468]. | Yes |
-| `/register`, `/login` | `POST` | [cite\_start]User account management[cite: 468]. | No |
+| `/recommend` | `GET` | Retrieves general similar movies (non-personalized). | No |
+| `/recommend/personal`| `GET` | Generates the Top 10 personalized movie recommendations. | Yes |
+| `/search` | `GET` | Executes movie searches by name. | No |
+| `/user/clicked` | `PUT` | Saves a movie click event for user profiling. | Yes |
+| `/user/favorites` | `PUT/DELETE` | Adds or removes a movie from the user's favorites list. | Yes |
+| `/register`, `/login` | `POST` | Handles user account creation and authentication. | No |
 
 -----
 
 ## Setup and Installation 
 
-[cite\_start]You can set up and run this system using the contents of `requirements.txt` (for Python backend) and `package.json` (for React frontend)[cite: 473].
+The system is designed to be fully reproducible, with dependencies tracked in `requirements.txt` (Python) and `package.json` (React).
 
 1.  **Clone the Repository**
 2.  **Backend Setup** (in the `back-end` folder):
@@ -81,15 +85,15 @@ The Flask backend exposes several key endpoints for the frontend application:
     npm install
     npm start
     ```
-      * *Note: Ensure you have deleted the `.git` folder inside the `front-end` directory if it still exists from the previous submodule configuration\!*
+      * ***Note:*** If `front-end` was previously tracked as a Git Submodule, ensure the internal `.git` folder has been removed to allow standard tracking of the content.
 
 -----
 
-## Future Work 
+## Future Work & Improvements 
 
-Based on the project's limitations, future improvements could include:
+Based on the project's limitations, key areas for future development include:
 
-  * [cite\_start]**Smarter Text Processing:** Integrating advanced NLP models like **BERT** or **Word Embeddings** to better understand the deep meaning of movie plots[cite: 510, 514].
-  * [cite\_start]**Advanced Models:** Experimenting with **Matrix Factorization** or **Deep Learning** techniques to improve recommendation accuracy[cite: 513].
-  * [cite\_start]**Scalability:** Utilizing tools like **Spark** or **ANN Search** to handle millions of movies in real-time[cite: 512, 515].
-  * [cite\_start]**Enhanced Interface:** Adding features like user ratings, watchlists, and social sharing[cite: 516].
+  * **Smarter Text Processing:** Integrating advanced NLP models like **BERT** or **Word Embeddings** to move beyond simple word counts and better understand the deep, semantic meaning of movie plots.
+  * **Advanced Models:** Experimenting with **Matrix Factorization** or **Deep Learning** techniques to further enhance recommendation accuracy and capture latent user-item relationships.
+  * **Scalability:** Utilizing Big Data tools such as **Spark** or **Approximate Nearest Neighbor (ANN) Search** to efficiently handle datasets with millions of movies in real-time.
+  * **Enhanced Interface:** Adding features like user ratings, watchlists, and social interaction capabilities to improve the overall user experience.
