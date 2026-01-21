@@ -14,7 +14,7 @@ This Bachelor's final year project delivers a fully functional **Intelligent Hyb
 
 ### Video Overview
 
-[![Video Thumbnail - Click to Watch!]([path/to/your/thumbnail.png](https://youtu.be/EZ7PLJ-qDoo?si=JN86wKEZc9mkpUgZ))]([https://www.youtube.com/watch?v=YourVideoID](https://youtu.be/EZ7PLJ-qDoo?si=JN86wKEZc9mkpUgZ))
+[![Click to Watch!](https://youtu.be/EZ7PLJ-qDoo)]
 
 -----
 
